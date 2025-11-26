@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoStream - Smart Water Solution</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* НЕГІЗГІ ДИЗАЙН (CSS) */
+        :root {
+            --primary: #0f2027; /* Қара-көк */
+            --secondary: #203a43;
+            --accent: #2c5364;
+            --highlight: #00d2ff; /* Ашық көк неон */
+            --text-light: #ffffff;
+            --text-dark: #333333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body { font-family: 'Roboto', sans-serif; background: #f4f4f4; color: var(--text-dark); overflow-x: hidden; }
+
+        /* HEADER */
+        header {
+            background: rgba(15, 32, 39, 0.95);
+            padding: 15px 50px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo { color: var(--highlight); font-size: 1.8rem; font-family: 'Montserrat', sans-serif; font-weight: 800; }
+        
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a { color: #fff; text-decoration: none; font-weight: 500; transition: 0.3s; position: relative; }
+        nav ul li a:hover { color: var(--highlight); }
+        nav ul li a::after { content: ''; width: 0; height: 2px; background: var(--highlight); position: absolute; bottom: -5px; left: 0; transition: 0.3s; }
+        nav ul li a:hover::after { width: 100%; }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1574169208507-843761948843?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
+            opacity: 0.2;
+        }
+
+        .hero-content { z-index: 1; animation: fadeInUp 1.5s ease; }
+        
+        .hero h1 { font-size: 4rem; font-family: 'Montserrat', sans-serif; margin-bottom: 20px; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .hero h1 span { color: var(--highlight); }
+        .hero p { font-size: 1.5rem; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto; }
+
+        .btn-main {
+            padding: 15px 40px; background: var(--highlight); color: var(--primary); font-weight: bold; border-radius: 30px; text-decoration: none; font-size: 1.2rem; transition: transform 0.3s, box-shadow 0.3s; display: inline-block;
+        }
+        .btn-main:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--highlight); }
+
+        /* SECTIONS */
+        section { padding: 100px 10%; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 60px; font-family: 'Montserrat', sans-serif; color: var(--primary); }
+
+        /* CARDS WITH POPUPS */
+        .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        
+        .card {
+            background: white; padding: 40px 30px; border-radius: 20px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.4s; position: relative; overflow: hidden;
+            border-bottom: 4px solid var(--highlight);
+        }
+
+        .card:hover { transform: translateY(-15px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        
+        .card i { font-size: 3rem; color: var(--accent); margin-bottom: 20px; }
+        .card h3 { font-size: 1.5rem; margin-bottom: 15px; }
+        
+        .btn-learn {
+            margin-top: 20px; padding: 10px 25px; border: 2px solid var(--accent); background: transparent; color: var(--accent); border-radius: 20px; cursor: pointer; transition: 0.3s; font-weight: bold;
+        }
+        .btn-learn:hover { background: var(--accent); color: white; }
+
+        /* MODAL POPUP STYLES */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: white; margin: 10% auto; padding: 40px; border-radius: 15px; width: 60%;
+            position: relative; animation: zoomIn 0.4s; text-align: left;
+        }
+        .close-btn { position: absolute; top: 15px; right: 25px; color: #aaa; font-size: 30px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover { color: red; }
+        .modal h2 { color: var(--primary); border-bottom: 2px solid var(--highlight); padding-bottom: 10px; margin-bottom: 20px; }
+
+        /* CALCULATOR */
+        .calc-box {
+            background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 700px; margin: 0 auto; border-left: 10px solid var(--highlight);
+        }
+        .range-slider { width: 100%; margin: 20px 0; }
+        .result-display {
+            font-size: 2rem; font-weight: bold; color: var(--accent); margin-top: 20px; padding: 20px; background: #f0f8ff; border-radius: 10px; text-align: center;
+        }
+
+        /* TEAM */
+        .team-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; }
+        .member { text-align: center; width: 200px; }
+        .member img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--highlight); margin-bottom: 15px; }
+
+        /* FOOTER */
+        footer { background: var(--primary); color: white; text-align: center; padding: 30px; }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* SCROLL REVEAL CLASS */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s all ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .modal-content { width: 90%; margin: 20% auto; }
+            header { padding: 15px 20px; }
+            nav { display: none; } /* Мобильді нұсқада меню жасырылады */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><i class="fas fa-water"></i> EcoStream</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Басты бет</a></li>
+                <li><a href="#solutions">Шешімдер</a></li>
+                <li><a href="#calculator">Мониторинг</a></li>
+                <li><a href="#team">Команда</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Өнеркәсіптік <span id="typing-text">Тазалық</span></h1>
+            <p>Мұнай-газ секторындағы су ресурстарын басқарудың жаңа экожүйесі.</p>
+            <a href="#calculator" class="btn-main">Жүйені іске қосу</a>
+        </div>
+    </section>
+
+    <!-- ИНТЕРАКТИВТІ БӨЛІМ: БАТЫРМАЛАР (MODALS) -->
+    <section id="solutions">
+        <h2 class="section-title reveal">Инновациялық Әдістер (3 саты)</h2>
+        <div class="cards-container reveal">
+            
+            <!-- 1. Мұнай-газ -->
+            <div class="card">
+                <i class="fas fa-oil-well"></i>
+                <h3>Өндірістік Цикл</h3>
+                <p>Қабат суларын ұңғымадан шығару және резервуарға жинау.</p>
+                <button class="btn-learn" onclick="openModal('modal1')">Толығырақ көру</button>
+            </div>
+
+            <!-- 2. Химия/Материал -->
+            <div class="card">
+                <i class="fas fa-vial"></i>
+                <h3>Нано-Фильтрация</h3>
+                <p>Химиялық реагенттер мен мембраналар арқылы тазарту.</p>
+                <button class="btn-learn" onclick="openModal('modal2')">Толығырақ көру</button>
+            </div>
+
+            <!-- 3. IT/Math -->
+            <div class="card">
+                <i class="fas fa-laptop-code"></i>
+                <h3>Smart Басқару</h3>
+                <p>Қолданбалы математика негізіндегі автоматтандыру.</p>
+                <button class="btn-learn" onclick="openModal('modal3')">Толығырақ көру</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- МОДАЛЬДЫ ТЕРЕЗЕЛЕР (ЖАСЫРЫН) -->
+    
+    <!-- Modal 1: Petroleum -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal1')">&times;</span>
+            <h2><i class="fas fa-oil-well"></i> Инженерлік шешімдер</h2>
+            <p><strong>Мұнай-газ және Энергетика факультеті:</strong></p>
+            <br>
+            <p>Біздің топ мүшелері ұңғыма жұмысын тоқтатпай суды айдау сұлбасын жасады. Лас сулар тікелей сепараторлардан "EcoStream" блогына түседі. Бұл өндірістік шығындарды 25%-ға азайтады және экологиялық нормаларды сақтайды.</p>
+        </div>
+    </div>
+
+    <!-- Modal 2: Chem/Material -->
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal2')">&times;</span>
+            <h2><i class="fas fa-atom"></i> Химия және Материалтану</h2>
+            <p><strong>Химиялық Инженерия және Жасыл технологиялар:</strong></p>
+            <br>
+            <ul>
+                <li><strong>Коагуляция:</strong> Темір сульфатын қолдану арқылы ауыр бөлшектерді шөгіндіге түсіру.</li>
+                <li><strong>Мембрана:</strong> Полиамидті композиттік нано-талшықтар. Бұл материал коррозияға төзімді және 99.9% тазалықты қамтамасыз етеді.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Modal 3: IT/Math -->
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal3')">&times;</span>
+            <h2><i class="fas fa-code"></i> IT және Математика</h2>
+            <p><strong>Қолданбалы Математика:</strong></p>
+            <br>
+            <p>Біз судың ластану динамикасын есептейтін <em>дифференциалдық теңдеулер жүйесін</em> құрдық. Төмендегі калькулятор JavaScript тілінде жазылған алгоритм арқылы нақты уақытта болжам жасайды.</p>
+        </div>
+    </div>
+
+    <!-- КАЛЬКУЛЯТОР БӨЛІМІ -->
+    <section id="calculator" style="background: #eef2f3;">
+        <h2 class="section-title reveal">Онлайн Мониторинг Жүйесі</h2>
+        <div class="calc-box reveal">
+            <p style="margin-bottom: 20px;">Судың ластану деңгейін енгізіңіз (PPM):</p>
+            
+            <input type="range" min="0" max="1000" value="500" class="range-slider" id="pollutionInput" oninput="calculate()">
+            <p>Қазіргі ластану: <strong id="inputVal" style="color:var(--secondary)">500 PPM</strong></p>
+            
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ddd;">
+            
+            <p>Тазартудан кейінгі болжам:</p>
+            <div class="result-display" id="resultText">Тазалық: 0%</div>
+            <p id="statusMsg" style="text-align: center; margin-top: 10px;">Деректер күтілуде...</p>
+        </div>
+    </section>
+
+    <!-- КОМАНДА -->
+    <section id="team">
+        <h2 class="section-title reveal">Жоба Авторлары</h2>
+        <div class="team-container reveal">
+            <!-- 7 Студент (Өзгертіңіз) -->
+            <div class="member">
+                <img src="https://cdn-icons-png.flaticon.com/512/4042/4042356.png" alt="User">
+                <h4>Студент Аты</h4>
+                <p style="color: gray; font-size: 0.9rem;">Мұнай-газ ісі</p>
+            </div>
+            <div class="member">
+                <img src="https://cdn-icons-png.flaticon.com/512/4042/4042356.png" alt="User">
+                <h4>Студент Аты</h4>
+                <p style="color: gray; font-size: 0.9rem;">Химия</p>
+            </div>
+            <div class="member">
+                <img src="https://cdn-icons-png.flaticon.com/512/4042/4042356.png" alt="User">
+                <h4>Студент Аты</h4>
+                <p style="color: gray; font-size: 0.9rem;">Математика</p>
+            </div>
+             <!-- Басқа студенттерді осылай қосыңыз -->
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 EcoStream StartUp Project. Барлық құқықтар қорғалған.</p>
+        <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.7;">Developed by Math Team for University Project</p>
+    </footer>
+
+    <!-- JAVASCRIPT (Сайт миы) -->
+    <script>
+        // 1. Анимация (Scroll Reveal)
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if(el.getBoundingClientRect().top < window.innerHeight - 100) {
+                    el.classList.add('active');
+                }
+            });
+        });
+
+        // 2. Модальды терезелерді ашу/жабу функциялары
+        function openModal(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Терезенің сыртын басқанда жабу
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        // 3. Калькулятор логикасы
+        function calculate() {
+            let val = document.getElementById('pollutionInput').value;
+            document.getElementById('inputVal').innerText = val + " PPM";
+            
+            // Математикалық формула (Жай мысал)
+            // Егер ластану 1000 болса, тазалау қиын, егер 100 болса оңай.
+            let efficiency = 99.9; 
+            let resultPurity = efficiency - (val / 500); // Формула
+            
+            if(resultPurity > 99.9) resultPurity = 99.9;
+            if(resultPurity < 0) resultPurity = 0;
+
+            let finalRes = resultPurity.toFixed(2);
+            let resBox = document.getElementById('resultText');
+            let status = document.getElementById('statusMsg');
+
+            resBox.innerText = "Тазалық: " + finalRes + "%";
+
+            if(finalRes > 90) {
+                resBox.style.color = "#27ae60"; // Жасыл
+                status.innerText = "Су техникалық қолданысқа жарамды ✅";
+                status.style.color = "#27ae60";
+            } else {
+                resBox.style.color = "#c0392b"; // Қызыл
+                status.innerText = "Қосымша фильтрация қажет ⚠";
+                status.style.color = "#c0392b";
+            }
+        }
+    </script>
+</body>
+</html>
